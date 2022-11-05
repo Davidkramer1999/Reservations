@@ -4,11 +4,11 @@
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
     <h3>
       You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
+      <a href="/AccommodationView" target="_blank" rel="noopener">Vite</a> +
+      <a href="/SelectCrypto" target="_blank" rel="noopener">Vue 3</a>.
+      <select>sss</select>
     </h3>
   </div>
 </template>
@@ -30,6 +30,7 @@ h3 {
 }
 
 @media (min-width: 1024px) {
+
   .greetings h1,
   .greetings h3 {
     text-align: left;

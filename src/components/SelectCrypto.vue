@@ -1,28 +1,39 @@
 
 <template>
     <div>
-        <v-select :items="rates" label="Solo field"></v-select>
+        <!-- <div>
+            <select class="addToSelect" v-model="selectedRate" multiple>
+                <option v-for=" (rate, index) in rates" :value="rate.symbol" :key="index">
+                    {{ rate.symbol }}
+                </option>
+            </select>
+            <div>Selected: {{ selectedRate }}</div>
+            <div>
+                <router-link to="/AccommodationView"> Select accommodations</router-link>
+            </div>
+        </div> -->
+             <!-- :to="'/AccommodationView'" -->
 
-
-        <select v-model="selectedRate">
-            <option v-for="(rate, index)  in rates" :value="rate.symbol" :key="index">
-                {{ rate.symbol }}
-            </option>
-        </select>
-        <div>Selected: {{ selectedRate }}</div>
         <div>
-            <li>
-                <router-link to="/AccommodationView">Todos</router-link>
-            </li>
-            <button v-if="selectedRate !== ''" @click="Accommodation()"> Continue to reservation </button>
+            <multiselect v-model="selectedRate" placeholder="Choose crypto?" label="symbol" track-by="rate"
+                :options="rates" :multiple="true" :taggable="true"></multiselect>
+            <router-link v-if="selectedRate.length !== 0"
+            :to="{ name: 'AccommodationView', params: { selectedRate } }"
+            >
+                Select
+                accommodations
+            </router-link>
         </div>
     </div>
 </template>
+
 <script>
+import Multiselect from 'vue-multiselect'
 export default {
+    components: { Multiselect },
     data() {
         return {
-            selectedRate: "",
+            selectedRate: [],
             rates: []
         }
     },
@@ -39,18 +50,16 @@ export default {
         }
         this.rates = rates
     },
-    methods: {
-        Accommodation() {
-
-        }
+    provide() {
+        return { foo: 'hi' }
     }
 }
 </script>
   
   
-<style>
-.root {
-    margin: 0 auto;
-    max-width: 600px;
-}
+<style src="vue-multiselect/dist/vue-multiselect.min.css">
+/* .addToSelect {
+    border: 1px !important;
+    border-color: black !
+} */
 </style>

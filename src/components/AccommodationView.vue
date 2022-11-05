@@ -1,18 +1,23 @@
 <template>
-    <v-card>
-        <v-card-title>
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
-            </v-text-field>
-        </v-card-title>
-        <v-data-table :headers="headers" :items="accommodation" :search="search" v-model="selected"
-            :footer-props="{ 'items-per-page-options': [11] }" item-key="id" show-select class="elevation-1"
-            :single-select="singleSelect">
-        </v-data-table>
-        <template v-slot:top>
-            <v-switch v-model="singleSelect" label="Single select" class="pa-3"></v-switch>
-        </template>
-    </v-card>
+    <div>
+        <v-card>
+            <v-card-title>
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
+                </v-text-field>
+            </v-card-title>
+            <v-data-table :headers="headers" :items="accommodation" :search="search" v-model="selected"
+                :footer-props="{ 'items-per-page-options': [11] }" item-key="id" show-select class="elevation-1"
+                :single-select="singleSelect">
+            </v-data-table>
+            <template v-slot:top>
+                <v-switch v-model="singleSelect" label="Single select" class="pa-3"></v-switch>
+            </template>
+        </v-card>
+        <!-- <button v-on:click="save">Save choosed accommodations</button> -->
+        <button v-on:click="this.$router.push({ name: '/AccommodationView' })">Redirect to saved accommodations</button>
+    <li>{{selectedCrypto}}</li>
+    </div>
 </template>
 
 
@@ -23,11 +28,15 @@ export default {
         const response = await fetch("https://5ddbbbd5041ac10014de14d7.mockapi.io/accommodations/prices");
         const data = await response.json()
         this.accommodation = data
+        if (localStorage.selected) {
+            this.selectedCrypto = localStorage.selected;
+        }
     },
     data() {
         return {
             singleSelect: false,
             selected: [],
+            selectedCrypto: [],
             search: '',
             headers: [
                 { text: 'id', value: 'id', filterable: false },
@@ -42,6 +51,11 @@ export default {
             accommodation: [],
         }
     },
-
+    methods: {
+        persist: function () {
+            localStorage.selected = this.selectedCrypto;
+            console.log(this.selectedCrypto)
+        }
+    }
 }
 </script>
