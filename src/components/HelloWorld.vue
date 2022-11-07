@@ -1,39 +1,56 @@
-<script setup>
-
-</script>
-
 <template>
-  <div class="greetings">
-    <h3>
-      You’ve successfully created a project with
-      <a href="/AccommodationView" target="_blank" rel="noopener">Vite</a> +
-      <a href="/SelectCrypto" target="_blank" rel="noopener">Vue 3</a>.
-      <select>sss</select>
-    </h3>
+  <div>
+    <div class="currency-select">
+      <multiselect v-model="selectedRates" placeholder="Choose currency?" label="symbol" track-by="rate"
+        :options="rates" :multiple="true" :taggable="true"></multiselect>
+      <router-link v-if="selectedRates.length !== 0" :to="{
+        name: 'AccommodationView',
+        params: { rates: selectedRates },
+      }">
+        Select accommodations
+      </router-link>
+    </div>
   </div>
 </template>
 
+<script>
+import Multiselect from "vue-multiselect";
+export default {
+  components: { Multiselect },
+  data() {
+    return {
+      selectedRates: [],
+      rates: [],
+    };
+  },
+  async mounted() {
+    const response = await fetch(
+      "https://api.exchangerate-api.com/v4/latest/EUR"
+    );
+    const data = await response.json();
+    let rates = [];
+    for (const [symbol, rate] of Object.entries(data.rates)) {
+      rates.push({
+        symbol,
+        rate,
+      });
+    }
+    this.rates = rates;
+  },
+};
+</script>
+
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  top: -10px;
+.currency-select {
+  margin-top: 20px;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
+</style>
 
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
+<style src="vue-multiselect/dist/vue-multiselect.min.css">
+.currency-select {
+  width: 70%;
 }
 </style>
